@@ -3,9 +3,10 @@
     records: @props.data
   getDefaultProps: ->
     records: []
-  addRecord: (record) ->
-    records = @state.records.slice()
-    records.push record
+  addRecord: (record) -> 
+    records = React.addons.update(@state.records, { $push: [record] })
+    #records = @state.records.slice()  without react addons in  application.rb
+    #records.push record
     @setState records: record
   credits: ->
     credits = @state.records.filter (val) -> val.amount >= 0
@@ -20,9 +21,11 @@
   balance: ->
     @debits() + @credits()
   deleteRecord: (record) ->
-    records = @state.records.slice()
-    index = records.indexOf record
-    records.splice index, 1
+    #records = @state.records.slice()
+    #index = records.indexOf record
+    #records.splice index, 1
+    index = @state.records.indexOf record
+    records = React.addons.update(@state.records, { $splice: [[index, 1]] })
     @replaceState records: records
 
   render: ->
